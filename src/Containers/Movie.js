@@ -1,6 +1,7 @@
 import React, {Component} from 'react';
 import {nanoid} from 'nanoid';
-
+import MovieName from "../Components/MovieName/MovieName";
+import MovieList from "../Components/MovieList/MovieList";
 
 class Movie extends Component {
     state = {
@@ -15,10 +16,6 @@ class Movie extends Component {
 
     addMovieName = e => {
         e.preventDefault();
-
-        // const movieList = [...this.state.movieList];
-        // const movie = {id: nanoid(), text: this.state.movieName};
-        // movieList.push(movie);
         this.setState({movieName: ''});
         this.setState({movieList: [...this.state.movieList, {id: nanoid(), text: this.state.movieName}]});
 
@@ -33,32 +30,32 @@ class Movie extends Component {
 
         this.setState({movieList});
     };
-    // changeMovBan = (id) => {
-    //     const copyMovie = state.movieList.map(mov => (
-    //         ...mov,
-    //
-    //     ))
-    // }
 
-    // removeMovieName = id => {
-    //     const index = this.state.movieList.findIndex(p => p.id === id);
-    //     const movieList = [...this.state.movieList];
-    //     movieList.splice(index, 1);
-    //     this.setState({movieList});
-    // };
-    // removeMov = (id) => {
-    //     //     const copyMovie = state.movieList.map(mov => (
-    //     //         ...mov,
-    //     //
-    //     //     ))
-    //     // }
-    //
-    // }
+
+    removeMovieName = id => {
+        const index = this.state.movieList.findIndex(p => p.id === id);
+        const movieList = [...this.state.movieList];
+        movieList.splice(index, 1);
+        this.setState({movieList});
+    };
+
 
     render() {
         return (
             <div className="movie">
-              
+                <MovieName
+                    movieName={this.state.movieName}
+                    newMovie={e => this.createMovieName(e)}
+                    addMovie={this.addMovieName}
+                />
+                {this.state.movieList.map(item => (
+                    <MovieList
+                        key={item.id}
+                        text={item.text}
+                        changeMovie={e => this.changeMovieName(e, item.id)}
+                        removeMovie={() => this.removeMovieName(item.id)}
+                    />
+                ))}
             </div>
         );
     }
